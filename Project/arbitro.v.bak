@@ -1,0 +1,116 @@
+`timescale 1ns/1ns
+
+module SM1 (
+    input reset, input clock, input NiosReq[7:0], input ReadBus,
+    output RXuart, output BufferNIOS);
+
+    enum int unsigned { Idle=0, CheckSum=1, TimeOut1=2, SendBack=3, TryAlarm=4, Alarm=5, Timer=6 } fstate, reg_fstate;
+    
+    reg tempo = 0;
+    reg timer2 = 0;
+    reg timer3 = 0;
+
+    parameter temp = 10000;
+
+    reg firstbyte[7:0];
+    reg secondbyte[7:0];
+    reg checkdado[7:0];
+
+    reg RXuart_old;
+    reg BufferNIOS_old;
+
+    reg NiosReq_old;
+    reg ReadBus_old;
+
+    always_ff @(posedge clock or posedge reset)
+    begin
+        if (reset) begin
+            fstate <= Idle;
+        end
+        else begin
+            fstate <= reg_fstate;
+        end
+    end
+
+    always_comb begin
+        RXuart <= 1'b1;
+        BufferNIOS <= 1'b1;
+        case (fstate)
+            Idle: begin
+                if (NiosReq != NiosReq_old)// Se tiver algo na requisição do Nios vá para o timer
+                    reg_fstate <= Timer;
+                else if (ReadBus != ReadBus_old)// Se tiver algo vindo da UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else
+                    reg_fstate <= Idle;
+            end
+            CheckSum: begin
+                checkdado <= firstbyte ^ 00110111;
+
+                if (checkdado == secondbyte && firstbyte != 1'b00000000) // Se o dado estiver correto e for um dado requisitado, vá para send back
+                    reg_fstate <= SendBack;
+                else if (checkdado != secondbyte)// Se o dado vier "corrompido" vá para o teste de alarme
+                    reg_fstate <= TryAlarm;
+                else if (checkdado == secondbyte && firstbyte == 1'b00000000)// Se o dado estiver correto e for o alarme vá para alarme
+                    reg_fstate <= Alarm;
+                else
+                    reg_fstate <= Idle;
+            end
+            TimeOut1: begin
+                reg_fstate <= Idle;
+
+                BufferNIOS <= 1'b010;// CODIGO PARA TIMEOUT NO BUFFER
+            end
+            SendBack: begin
+                reg_fstate <= Idle;
+
+                BufferNIOS <= ReadBus;// CODIGO DO DADO RECEBIDO DO ARDUINO
+            end
+            TryAlarm: begin
+                if (ReadBus != ReadBus_old)// Se ainda estiver em tempo, e receber algo na UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else if (timer3 >= temp)// Caso o tempo estoure vá para o idle e grave um "bug" no buffer
+                    BufferNIOS <= 1'b1011; //CODIGO PARA BUG NO BUFFER
+                    reg_fstate <= Idle;
+                    timer3 <= 0;
+                else
+                    reg_fstate <= TryAlarm;
+                
+                timer3 <= timer3 + 1;
+            end
+            Alarm: begin
+                if (ReadBus != ReadBus_old)// Se chegar algo na UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else if ((timer2 >= temp))// se o timer estourar vá para Idle
+                    reg_fstate <= Idle;
+                    timer2 <= 0;
+
+                timer2 <= timer2 + 1;
+                RXuart <= 000; //CODIGO PARA CALAR A BOCA DO ALARME
+                BufferNIOS <= 1'b1;//CODIGO PARA ALARME NO BUFFER
+            end
+            Timer: begin
+                if (((tempo >= temp) & (ReadBus == 1'b0)))// Se o tempo estourar vá para TimeOut (de requisição)
+                    reg_fstate <= TimeOut1;
+                    tempo <= 0;
+                else if (((ReadBus == 1'b1) & (tempo < temp)))
+                    reg_fstate <= CheckSum;
+                // Inserting 'else' block to prevent latch inference
+                else
+                    tempo <= tempo + 1;
+                    reg_fstate <= Timer;
+
+                RXuart <= NiosReq;// CODIGO DE REQUISIÇÃO VINDA DO NIOS
+            end
+            default: begin
+                RXuart <= 1'bx;
+                BufferNIOS <= 1'bx;
+                $display ("Reach undefined state");
+            end
+        endcase
+
+        NiosReq_old <= NiosReq;
+        ReadBus_old <= ReadBus;
+
+    end
+endmodule // SM1

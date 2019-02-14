@@ -1,0 +1,100 @@
+
+`timescale 1ns / 1ps
+
+module testeArbitro();
+
+ parameter Halfcycle = 5; //half period is 5ns
+    
+ localparam Cycle = 2*Halfcycle;
+ 
+ localparam loops = 50;
+ 
+ 
+ 
+ //entradas
+  reg [31:0]dataa;
+  reg rx;
+  reg Clock;
+  reg reset;
+  
+ //wire saidas
+  wire tx;
+  wire [31:0]result;
+  wire done;
+  wire [31:0]estado123;
+  
+ 
+ // Clock Signal generation:
+ initial begin 
+ 
+ 
+Clock = 0; 
+dataa <= 32'b00000000000000000000000000000110;
+reset <= 0;
+ 
+ 
+ end
+ 
+ //always # 1 Clock = ~Clock;
+ 
+ 
+
+
+	 
+	 SM1 TESTE(.clock(Clock),
+        .reset(reset),
+		  .dataa(dataa),
+		  .RXuart(rx),
+		  .TXuart(tx),
+		  .result(result),
+		  .done(done),
+		  .estado(estado123));
+ 
+
+
+ 
+ 
+  always @(posedge Clock)begin
+ 
+ 
+	//rx = $urandom_range(1'b1,1'b0); //Teste normal
+	
+	rx = $urandom_range(1'b1,1'b0); //Teste normal
+	//Teste com alarme e dados
+	
+	
+		//rx = 1'b0; //Teste de alarme
+	
+	
+	
+	
+	
+	//rx = 1'b0; //Teste de alarme
+ 
+ end
+
+initial begin
+
+
+		
+		#20;
+		repeat (50) @ (posedge Clock);
+	   
+		dataa <= 32'b00000000000000000000000000000010;
+
+
+	
+	
+	
+	//dataa <= 32'b00100000000000000000000000000000;
+	
+	
+	
+	//#50
+	
+end
+
+
+
+
+endmodule

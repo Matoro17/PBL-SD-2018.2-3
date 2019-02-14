@@ -1,0 +1,20 @@
+C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv {2 {vlog -work work -sv -stats=none C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module SM1
+** Warning: C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv(111): (vlog-2182) 'tempo' might be read before written in always_comb or always @* block.
+** Warning: C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv(100): (vlog-2182) 'timer2' might be read before written in always_comb or always @* block.
+** Warning: C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv(84): (vlog-2182) 'timer3' might be read before written in always_comb or always @* block.
+** Warning: C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv(46): (vlog-2182) 'dataa_old' might be read before written in always_comb or always @* block.
+** Warning: C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv(48): (vlog-2182) 'RXuart_old' might be read before written in always_comb or always @* block.
+
+Top level modules:
+	SM1
+
+} {} {}} C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v {1 {vlog -work work -stats=none C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v
+Model Technology ModelSim - Intel FPGA Edition vlog 10.5b Compiler 2016.10 Oct  5 2016
+-- Compiling module testeArbitro
+
+Top level modules:
+	testeArbitro
+
+} {} {}}

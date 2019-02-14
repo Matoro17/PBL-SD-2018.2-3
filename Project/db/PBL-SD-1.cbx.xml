@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<LOG_ROOT>
+	<PROJECT NAME="PBL-SD-1">
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_Nios:nios|Nios_Nios_nios2_oci:the_Nios_Nios_nios2_oci|Nios_Nios_nios2_ocimem:the_Nios_Nios_nios2_ocimem|Nios_Nios_ociram_sp_ram_module:Nios_Nios_ociram_sp_ram|altsyncram:the_altsyncram" CBX_FILE_NAME="altsyncram_u581.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_Nios:nios|Nios_Nios_register_bank_a_module:Nios_Nios_register_bank_a|altsyncram:the_altsyncram" CBX_FILE_NAME="altsyncram_bvf1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_Nios:nios|Nios_Nios_register_bank_b_module:Nios_Nios_register_bank_b|altsyncram:the_altsyncram" CBX_FILE_NAME="altsyncram_cvf1.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_jtag_uart_0:jtag_uart_0|Nios_jtag_uart_0_scfifo_w:the_Nios_jtag_uart_0_scfifo_w|scfifo:wfifo" CBX_FILE_NAME="scfifo_jr21.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_memory:memory|altsyncram:the_altsyncram|altsyncram_trb1:auto_generated|altsyncram:ram_block1a0" CBX_FILE_NAME="altsyncram_utb3.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_jtag_uart_0:jtag_uart_0|Nios_jtag_uart_0_scfifo_r:the_Nios_jtag_uart_0_scfifo_r|scfifo:rfifo" CBX_FILE_NAME="scfifo_jr21.tdf"/>
+		<CBX_INST_ENTRY INSTANCE_NAME="|Nios|Nios_memory:memory|altsyncram:the_altsyncram" CBX_FILE_NAME="altsyncram_trb1.tdf"/>
+	</PROJECT>
+</LOG_ROOT>

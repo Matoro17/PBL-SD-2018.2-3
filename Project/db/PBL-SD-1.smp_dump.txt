@@ -1,0 +1,38 @@
+
+State Machine - |Nios|Lamaquina:arbitro4_0|state
+Name state.Timer state.Alarm state.TryAlarm state.SendBack state.TimeOut1 state.Checksum state.Idle 
+state.Idle 0 0 0 0 0 0 0 
+state.Checksum 0 0 0 0 0 1 1 
+state.TimeOut1 0 0 0 0 1 0 1 
+state.SendBack 0 0 0 1 0 0 1 
+state.TryAlarm 0 0 1 0 0 0 1 
+state.Alarm 0 1 0 0 0 0 1 
+state.Timer 1 0 0 0 0 0 1 
+
+State Machine - |Nios|Lamaquina:arbitro4_0|uart:uart_instance|receiver:uart_rx|state
+Name state.RX_STATE_START state.RX_STATE_STOP state.RX_STATE_DATA 
+state.RX_STATE_START 0 0 0 
+state.RX_STATE_DATA 1 0 1 
+state.RX_STATE_STOP 1 1 0 
+
+State Machine - |Nios|Lamaquina:arbitro4_0|uart:uart_instance|transmitter:uart_tx|state
+Name state.STATE_STOP state.STATE_DATA state.STATE_START state.STATE_IDLE 
+state.STATE_IDLE 0 0 0 0 
+state.STATE_START 0 0 1 1 
+state.STATE_DATA 0 1 0 1 
+state.STATE_STOP 1 0 0 1 
+
+State Machine - |Nios|lcd_driver:lcd_0|state
+Name state.idle state.finish state.working 
+state.idle 0 0 0 
+state.working 1 0 1 
+state.finish 1 1 0 
+
+State Machine - |Nios|Nios_Nios:nios|Nios_Nios_nios2_oci:the_Nios_Nios_nios2_oci|Nios_Nios_jtag_debug_module_wrapper:the_Nios_Nios_jtag_debug_module_wrapper|Nios_Nios_jtag_debug_module_tck:the_Nios_Nios_jtag_debug_module_tck|DRsize
+Name DRsize.101 DRsize.100 DRsize.011 DRsize.010 DRsize.001 DRsize.000 
+DRsize.000 0 0 0 0 0 0 
+DRsize.001 0 0 0 0 1 1 
+DRsize.010 0 0 0 1 0 1 
+DRsize.011 0 0 1 0 0 1 
+DRsize.100 0 1 0 0 0 1 
+DRsize.101 1 0 0 0 0 1 

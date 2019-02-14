@@ -1,0 +1,53 @@
+m255
+K3
+z0
+13
+cModel Technology
+dC:\altera\13.1
+vSM1
+DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z0 !s110 1549737588
+!i10b 1
+!s100 fkZBdI2]I`U76z<3ibkUU2
+Iji1mbic4]H@P^gO2_Qj[L3
+Z1 VDg1SIo80bB@j0V0VzS_@n1
+!s105 SM1_sv_unit
+S1
+Z2 dC:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master
+w1549737116
+8C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv
+FC:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv
+L0 3
+Z3 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z4 !s108 1549737588.000000
+!s107 C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv|
+!s90 -reportprogress|300|-work|work|-sv|-stats=none|C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/SM1.sv|
+!i113 1
+o-work work -sv
+Z5 tCvgOpt 0
+n@s@m1
+vtesteArbitro
+R0
+!i10b 1
+!s100 ij6iT9J;TbhYAdU3=nbXR3
+IZ`YG7YWD]H`V;eVaVifCa2
+R1
+R2
+w1549654366
+8C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v
+FC:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v
+L0 4
+R3
+r1
+!s85 0
+31
+R4
+!s107 C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Micro/Desktop/PBL_SD-master/PBL_SD-master/testeArbitro.v|
+!i113 1
+o-work work
+R5
+nteste@arbitro

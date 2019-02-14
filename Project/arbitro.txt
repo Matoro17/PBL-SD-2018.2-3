@@ -1,0 +1,128 @@
+`timescale 1ns/1ns
+
+module SM1 (
+    input reset, input clock, input [31:0] dataa, input RXuart,
+    output TXuart, output [31:0] result, output done);
+
+    enum integer unsigned { Idle=0, CheckSum=1, TimeOut1=2, SendBack=3, TryAlarm=4, Alarm=5, Timer=6 } fstate, reg_fstate;
+    
+    reg tempo = 0;
+    reg timer2 = 0;
+    reg timer3 = 0;
+
+    parameter temp = 10000;
+
+    reg [7:0] firstbyte;
+    reg [7:0] secondbyte;
+    reg [7:0] checkdado;
+
+    reg TXuart_old;
+    reg result_old;
+
+    reg dataa_old;
+    reg RXuart_old;
+
+    always @(posedge clock or posedge reset)
+    begin
+        if (reset) begin
+            fstate <= Idle;
+        end
+        else begin
+            fstate <= reg_fstate;
+        end
+    end
+
+    always begin
+        TXuart <= 1'b1;
+        result <= 1'b1;
+        case (fstate)
+            Idle: begin
+					done <= 1'b0;
+                if (dataa != dataa_old)// Se tiver algo na requisição do Nios vá para o timer
+                    reg_fstate <= Timer;
+                else if (RXuart != RXuart_old)// Se tiver algo vindo da UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else
+                    reg_fstate <= Idle;
+            end
+            CheckSum: begin
+                checkdado <= firstbyte ^ 8'b0011_0111;
+
+                if (checkdado == secondbyte && firstbyte != 8'b0000_0000) // Se o dado estiver correto e for um dado requisitado, vá para send back
+                    reg_fstate <= SendBack;
+                else if (checkdado != secondbyte)// Se o dado vier "corrompido" vá para o teste de alarme
+                    reg_fstate <= TryAlarm;
+                else if (checkdado == secondbyte && firstbyte == 8'b0000_0000)// Se o dado estiver correto e for o alarme vá para alarme
+                    reg_fstate <= Alarm;
+                else
+                    reg_fstate <= Idle;
+            end
+            TimeOut1: begin
+                reg_fstate <= Idle;
+
+                result <= 3'b010;// CODIGO PARA TIMEOUT NO BUFFER
+					 done <= 1'b1;
+            end
+            SendBack: begin
+                reg_fstate <= Idle;
+
+                result <= RXuart;// CODIGO DO DADO RECEBIDO DO ARDUINO
+					 done <= 1'b1;
+            end
+            TryAlarm: begin
+                if (RXuart != RXuart_old)// Se ainda estiver em tempo, e receber algo na UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else if (timer3 >= temp)// Caso o tempo estoure vá para o idle e grave um "bug" no buffer
+                    begin
+                        result <= 4'b1011; //CODIGO PARA BUG NO BUFFER
+								done <= 1'b1;
+                        reg_fstate <= Idle;
+                        timer3 <= 0;
+                    end
+                else
+                    reg_fstate <= TryAlarm;
+                
+                timer3 <= timer3 + 1;
+            end
+            Alarm: begin
+                if (RXuart != RXuart_old)// Se chegar algo na UART vá para o checksum
+                    reg_fstate <= CheckSum;
+                else if ((timer2 >= temp))// se o timer estourar vá para Idle
+                    reg_fstate <= Idle;
+                    timer2 <= 0;
+
+                timer2 <= timer2 + 1;
+                TXuart <= 000; //CODIGO PARA CALAR A BOCA DO ALARME
+                result <= 1'b1;//CODIGO PARA ALARME NO BUFFER
+					 done <= 1'b1;
+            end
+            Timer: begin
+                if (((tempo >= temp) & (RXuart == 1'b0)))// Se o tempo estourar vá para TimeOut (de requisição)
+                    begin
+                        reg_fstate <= TimeOut1;
+                        tempo <= 0;
+                    end
+                else if (((RXuart == 1'b1) & (tempo < temp)))
+                    reg_fstate <= CheckSum;
+                // Inserting 'else' block to prevent latch inference
+                else
+                    begin
+                        tempo <= tempo + 1;
+                        reg_fstate <= Timer;
+                    end
+						  
+                TXuart <= dataa;// CODIGO DE REQUISIÇÃO VINDA DO NIOS
+					 done <= 1'b1;
+            end
+            default: begin
+                TXuart <= 1'bx;
+                result <= 1'bx;
+                $display ("Reach undefined state");
+            end
+        endcase
+
+        dataa_old <= dataa;
+        RXuart_old <= RXuart;
+
+    end
+endmodule // SM1
